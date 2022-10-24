@@ -1,0 +1,71 @@
+MAGE-TAB Version	1.1
+Investigation Title	Single cell RNA-seq of individual cells from dorsal skin of a F1 mouse cross-breed (C57BL/6JxCAST/EiJ)
+
+Experimental Design	strain or line design
+Experimental Design Term Source REF	EFO
+Experimental Design Term Accession Number	EFO_0001754
+
+Experimental Factor Name	single cell identifier
+Experimental Factor Type	single cell identifier
+Experimental Factor Term Source REF	EFO
+Experimental Factor Term Accession Number	EFO_0010197
+
+Person Last Name	Sandberg	Larsson
+Person First Name	Rickard	Anton
+Person Mid Initials		
+Person Email	rickard.sandberg@ki.se	anton.larsson@ki.se
+Person Phone
+Person Fax
+Person Affiliation	Department of Cell and Molecular Biology, Karolinska Institutet, Stockholm, Sweden	Department of Cell and Molecular Biology, Karolinska Institutet,  Stockholm, Sweden
+Person Address	Solnavägen 9, 171 65, Solna, Sweden	Solnavägen 9, 171 65, Solna, Sweden
+Person Roles	investigator	submitter
+Person Roles Term Source REF	investigator	submitter
+Person Roles Term Accession Number	investigator	submitter
+
+Quality Control Type
+Quality Control Term Source REF
+Quality Control Term Accession Number
+
+Replicate Type
+Replicate Term Source REF
+Replicate Term Accession Number
+
+Normalization Type
+Normalization Term Source REF
+Normalization Term Accession Number
+
+Date of Experiment	2017-10-12
+Public Release Date	2022-10-07
+
+PubMed ID	33690599
+Publication DOI	10.1371/journal.pcbi.1008772
+Publication Author List	Larsson AJM, Ziegenhain C, Hagemann-Jensen M, Reinius B, Jacob T, Dalessandri T, Hendriks GJ, Kasper M, Sandberg R.
+Publication Title	Transcriptional bursts explain autosomal random monoallelic expression and affect allelic imbalance.
+Publication Status	published
+Publication Status Term Source REF
+Publication Status Term Accession Number
+
+Experiment Description	Sequencing of diverse cell types present in the dorsal skin of a F1 mouse cross-breed in order to study the regulation of transcription on an allele-resolved level.
+
+Protocol Name	P-MTAB-126593	P-MTAB-126596	P-MTAB-126595	P-MTAB-126594
+Protocol Type	sample collection protocol	nucleic acid sequencing protocol	nucleic acid library construction protocol	nucleic acid extraction protocol
+Protocol Term Source REF	EFO	EFO	EFO	EFO
+Protocol Term Accession Number	EFO_0005518	EFO_0004170	EFO_0004184	EFO_0002944
+Protocol Description	Skin tissue was dissected from 9 week old female F1 offspring of matings between CAST/EiJ and C57BL/6J mice. Cells were dissociated from skin as described in Joost et al., or using GentleMACS (Miltenyi Biotec); with both methods giving similar cell yields and viability. Briefly, for the GentleMACS method, dorsal skin was cut and minced into small pieces (approximately 1x1mm) and incubated in HBSS (Sigma) + 0.04% BSA (Sigma) + 0.2% Collagenase Ia (Sigma) at 37°C for 60 minutes with occasional agitation. Thereafter this slurry was processed on a GentleMACS (Miltenyi Biotec) with 2x Program D, cell-strained (70um) and washed. Residual tissue was further treated with HBSS + 0.05% Trypsin-EDTA (Sigma) at 37°C for 15 minutes and processed likewise. For the Joost et al method, GentleMACS dissociation was substituted with manual disaggregation by smashing tissue fragments against a cell strainer with the piston from a 5 mL syringe	Libraries were sequenced on the Illumina HiSeq 4000 per the manufacturer's protocol.	Cells were subjected to the Smart-seq2 protocol with no modification.	Cell lysis during sorting by FACS.
+Protocol Parameters
+Protocol Hardware		Illumina HiSeq 4000
+Protocol Software
+Protocol Contact
+
+Term Source Name	EFO	ArrayExpress
+Term Source File	http://www.ebi.ac.uk/efo/	http://www.ebi.ac.uk/arrayexpress/
+Term Source Version	http://www.ebi.ac.uk/efo/
+
+SDRF File	E-MTAB-12181.sdrf.txt
+Comment [Submitted Name]	Single cell RNA-seq of individual cells from dorsal skin of a F1 mouse cross-breed (C57BL/6JxCAST/EiJ)
+Comment [TemplateType]	Animal - Single-cell sequencing
+Comment [SecondaryAccession]	ERP141484
+Comment [SequenceDataURI]	http://www.ebi.ac.uk/ena/data/view/ERR10315265-ERR10317184
+Comment [AEExperimentType]	RNA-seq of coding RNA from single cells
+Comment[ArrayExpressAccession]	E-MTAB-12181
+Comment [RelatedExperiment]	E-MTAB-6385
