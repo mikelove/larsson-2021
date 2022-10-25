@@ -1,0 +1,4 @@
+fastq
+quants
+.snakemake
+*.out
