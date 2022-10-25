@@ -2,3 +2,4 @@ fastq
 quants
 .snakemake
 *.out
+*.rda

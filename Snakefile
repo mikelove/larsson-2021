@@ -1,4 +1,4 @@
-CELLS = range(1,384)
+CELLS = range(1,385)
 
 SALMON = "/proj/milovelab/bin/salmon-1.5.2_linux_x86_64/bin/salmon"
 
