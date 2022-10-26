@@ -19,10 +19,16 @@ sce <- logNormCounts(sce)
 # highly variable genes -> PCA
 dec <- modelGeneVar(sce)
 top <- getTopHVGs(dec, n=1000)
+set.seed(1)
 sce <- fixedPCA(sce, subset.row=top)
 plotReducedDim(sce, dimred="PCA", color_by="cluster")
 
 # TSNE similar to publication
+set.seed(1)
 sce <- runTSNE(sce, dimred="PCA")
-plotReducedDim(sce, dimred="TSNE", color_by="cluster")
 
+pdf(file = "cell_clustering.pdf")
+plotReducedDim(sce, dimred="TSNE",
+               color_by="cluster",
+               text_by="cluster")
+dev.off()
