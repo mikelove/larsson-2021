@@ -49,6 +49,8 @@ se <- importAllelicCounts(coldata,
                           format="wide",
                           tx2gene=txps)
 
-keep <- rowSums(assay(se) >= 10) >= 20
+keep <- rowSums(assay(se) >= 10) >= 10
 table(keep)
 se <- se[keep,]
+
+save(se, file="allelic_counts_tss_filt.rda")
