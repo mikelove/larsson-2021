@@ -12,38 +12,44 @@ cts <- assay(gse)
 tot <- cts[,idx-1] + cts[,idx]
 colnames(tot) <- sub("-a1","",colnames(gse)[idx])
 plot(sort(colSums(tot)[22:112]))
-cells_to_drop <- colnames(tot)[22:112][ colSums(tot)[22:112] < 2e6 ] # require 2e6 counts in the T-cells
-alleles_to_drop <- sort(paste0(cells_to_drop, rep(c("-a2","-a1"),each=length(cells_to_drop))))
+# require 2e6 counts in the T-cells
+cells_to_drop <- colnames(tot)[22:112][ colSums(tot)[22:112] < 2e6 ] 
+alleles_to_drop <- sort(paste0(cells_to_drop,
+                               rep(c("-a2","-a1"),each=length(cells_to_drop))))
 
 library(fishpond)
 
-gse <- gse[,-which(colnames(gse) %in% alleles_to_drop)]
+gse <- gse[,!colnames(gse) %in% alleles_to_drop]
 table(gse$cluster)/2
+gse <- labelKeep(gse, minCount=1, minN=45)
+table(mcols(gse)$keep)
 gse <- swish(gse, x="allele", pair="cell", cov="cluster", interaction=TRUE)
 
 hist(mcols(gse)$pvalue, breaks=40)
 table(mcols(gse)$qvalue < .05)
 
-library(dplyr)
+suppressPackageStartupMessages(library(dplyr))
 library(tibble)
 
 res <- mcols(gse) %>%
   as.data.frame() %>%
   as_tibble() 
 
-tot_sub <- tot[,-which(colnames(tot) %in% cells_to_drop)]
-res$log10TotMac <- log10(rowSums(tot_sub[,1:21])+1)
-res$log10TotTcell <- log10(rowSums(tot_sub[,22:46])+1)
+tot_sub <- tot[,!colnames(tot) %in% cells_to_drop]
+res$mac <- rowSums(tot_sub[,1:21] >= 5)
+res$tcell <- rowSums(tot_sub[,22:46] >= 5)
+res$b6 <- rowSums(assay(gse)[,gse$allele == "a2"] >= 5)
+res$cast <- rowSums(assay(gse)[,gse$allele == "a1"] >= 5)
 
 res <- res %>%
   arrange(pvalue, -log10mean) %>%
-  filter(log10TotMac > 3 & log10TotTcell > 3 & abs(log2FC) > 2) %>%
-  select(gene_id, gene_name, log10TotMac, log10TotTcell,
-         log10mean, log2FC, stat, pvalue, qvalue)
+  filter(mac >= 10 & tcell >= 10) %>%
+  filter(b6 >= 5 & cast >= 5) %>%
+  select(gene_id, gene_name, log10mean, log2FC, stat, pvalue, qvalue, 
+         mac, tcell, b6, cast)
 
 res_sub <- res %>%
-  slice(1:20) %>%
-  filter(!gene_name %in% c("Ptpra","Gpx1","Gm47428","Gm17494","Prex1","Cep85"))
+  slice(1:20)
 
 gse_symbol <- gse[res_sub$gene_id,]
 rownames(gse_symbol) <- mcols(gse_symbol)$gene_name
@@ -54,8 +60,7 @@ col_dat <- data.frame(condition=gse$cluster[idx],
 
 row_dat <- data.frame(absLFC=abs(res_sub$log2FC),
                       signLFC=factor(sign(res_sub$log2FC)),
-                      log10TotTcell=res_sub$log10TotTcell,
-                      log10TotMac=res_sub$log10TotMac,
+                      minusLogQ=-log10(res_sub$qvalue),
                       row.names=res_sub$gene_name)
 
 plotAllelicHeatmap(gse_symbol, idx=res_sub$gene_name,
@@ -63,6 +68,8 @@ plotAllelicHeatmap(gse_symbol, idx=res_sub$gene_name,
                    annotation_col=col_dat,
                    cluster_rows=FALSE,
                    show_colnames=FALSE)
+
+plotInfReps(gse_symbol, "Bmp2k", x="allele", cov="cluster")
 
 tot_mat_to_plot <- log10(tot_sub[res_sub$gene_id,]+.1)
 rownames(tot_mat_to_plot) <- res_sub$gene_name
@@ -81,7 +88,7 @@ levels(se$cluster) <- c("macrophage","T-cell")
 se <- se[,order(se$cluster,se$cell,se$allele)]
 ise <- se
 
-ise <- ise[,-which(colnames(ise) %in% alleles_to_drop)]
+ise <- ise[,!colnames(ise) %in% alleles_to_drop]
 table(ise$cluster)/2
 ise <- swish(ise, x="allele", pair="cell", cov="cluster", interaction=TRUE)
 
