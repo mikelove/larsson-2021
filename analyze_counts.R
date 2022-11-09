@@ -53,6 +53,8 @@ res_sub <- res %>%
 
 gse_symbol <- gse[res_sub$gene_id,]
 rownames(gse_symbol) <- mcols(gse_symbol)$gene_name
+gse_symbol <- computeInfRV(gse_symbol)
+assays(gse_symbol) <- assays(gse_symbol)[!grepl("infRep",assayNames(gse_symbol))]
 
 idx <- 1:(ncol(gse)/2) * 2
 col_dat <- data.frame(condition=gse$cluster[idx],
@@ -69,7 +71,7 @@ plotAllelicHeatmap(gse_symbol, idx=res_sub$gene_name,
                    cluster_rows=FALSE,
                    show_colnames=FALSE)
 
-plotInfReps(gse_symbol, "Bmp2k", x="allele", cov="cluster")
+plotInfReps(gse_symbol, "Ly6e", x="allele", cov="cluster", thin=1)
 
 tot_mat_to_plot <- log10(tot_sub[res_sub$gene_id,]+.1)
 rownames(tot_mat_to_plot) <- res_sub$gene_name
@@ -90,6 +92,8 @@ ise <- se
 
 ise <- ise[,!colnames(ise) %in% alleles_to_drop]
 table(ise$cluster)/2
+ise <- labelKeep(ise, minCount=1, minN=45)
+table(mcols(ise)$keep)
 ise <- swish(ise, x="allele", pair="cell", cov="cluster", interaction=TRUE)
 
 tres <- mcols(ise) %>%
@@ -98,13 +102,19 @@ tres <- mcols(ise) %>%
 
 tres_sub <- tres %>%
   dplyr::filter(gene_id %in% res_sub$gene_id) %>%
-  dplyr::filter(qvalue < .05) %>%
+  dplyr::filter(qvalue < .5) %>%
   arrange(pvalue) %>%
   dplyr::select(gene_id, group_id, log2FC, pvalue, qvalue)
 
-library(AnnotationHub)
+tres_sub %>%
+  arrange(group_id) %>%
+  inner_join(res[,c("gene_id","gene_name")])
+
+suppressPackageStartupMessages(library(AnnotationHub))
 ah <- AnnotationHub()
 edb <- ah[["AH89211"]] # v102 EnsDb M.m.
 ise_to_plot <- ise[,order(ise$allele, ise$cluster, ise$cell)]
+ise_to_plot <- ise_to_plot[mcols(ise_to_plot)$keep,]
 plotAllelicGene(ise_to_plot, gene="ENSMUSG00000022587", db=edb, cov="cluster")
 
+plotAllelicGene(ise_to_plot, gene="ENSMUSG00000060803", db=edb, cov="cluster")
